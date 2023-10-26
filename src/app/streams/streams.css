@@ -1,0 +1,42 @@
+.message-input {
+  border: none;
+  border-radius: 0px;
+  width: 100%;
+  height: 160px;
+  resize: none;
+  padding: 8px;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.message-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  background: rgba(86, 159, 188, 1);
+  padding: 8px;
+}
+
+.message {
+  display: flex;
+  padding: 16px;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.message .avatar {
+  width: 80px;
+  height: 80px;
+  background-color: aqua;
+  margin-right: 16px;
+}
+
+.message .handle {
+  color: rgba(86, 159, 188, 1);
+  font-weight: 600;
+  padding-bottom: 8px;
+}
+
+.message .message-content {
+ color: #6d6d6d
+}

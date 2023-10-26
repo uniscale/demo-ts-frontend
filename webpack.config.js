@@ -1,3 +1,3 @@
-experiments: {
-  topLevelAwait: true
+module.exports = {
+  mode: 'development',
 }
