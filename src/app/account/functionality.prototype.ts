@@ -5,21 +5,21 @@ import { UserFull } from "@uniscale-sdk/ActorCharacter-Messagethreads/sdk/Unisca
 const userMap = new Map<string,UserFull>()
 
 export const registerAccountInterceptors = (builder: PlatformInterceptorBuilder) => {
-    // In here we define all our prototyping mocks to simulate implemented functionaly that we want
+    // In here we define all our prototyping mocks to simulate implemented functionality that we want
     // to use while we build our frontend through high speed iterations.
     //
-    // In this case have have defined a static map of users that we utilise
-    // when implementing the features. As a result the applicatin will reset
+    // In this case have have defined a static map of users that we utilize
+    // when implementing the features. As a result the application will reset
     // every time you reload. If you wanted a more complex scenario you could
-    // use the browsers local storage so that your prototype data can be 
+    // use the browsers local storage so that your prototype data can be
     // persisted between reloads
     builder
         .interceptRequest(
-            // We can use the generated pattern structures in the generated SDK to 
+            // We can use the generated pattern structures in the generated SDK to
             // find the functionality we want to intercept. By using the
             // allRequestUsages we will intercept a call to any of the use case flows
             // that contains this feature
-            Patterns.account.getOrRegister.allRequestUsages, 
+            Patterns.account.getOrRegister.allRequestUsages,
             // From the generated pattern pattern structure we can also find helper
             // methods that we can use to implement the feature handler
             Patterns.account.getOrRegister.handleDirect((input, ctx) => {

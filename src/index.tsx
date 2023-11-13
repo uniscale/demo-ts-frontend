@@ -1,13 +1,12 @@
-import { StrictMode } from 'react';
-import {createRoot } from 'react-dom/client';
-import './index.css';
-import { App } from './App';
-import { DispatcherSession, GatewayRequest, Platform, Result } from '@uniscale-sdk/ActorCharacter-Messagethreads';
-import { registerAccountInterceptors } from './account/PrototypeFunctionality';
-import { registerStreamsInterceptors } from './streams/PrototypeFunctionality';
-import { Patterns as AccountPatterns } from '@uniscale-sdk/ActorCharacter-Messagethreads/sdk/UniscaleDemo/Account';
-import { Patterns as StreamsPatterns } from '@uniscale-sdk/ActorCharacter-Messagethreads/sdk/UniscaleDemo/Messages';
-import axios from 'axios';
+import { StrictMode } from 'react'
+import {createRoot } from 'react-dom/client'
+import { DispatcherSession, GatewayRequest, Platform, Result } from '@uniscale-sdk/ActorCharacter-Messagethreads'
+import { registerAccountInterceptors } from './app/account/functionality.prototype'
+import { registerStreamsInterceptors } from './app/streams/functionality.prototype'
+import { Patterns as AccountPatterns } from '@uniscale-sdk/ActorCharacter-Messagethreads/sdk/UniscaleDemo/Account'
+import { Patterns as StreamsPatterns } from '@uniscale-sdk/ActorCharacter-Messagethreads/sdk/UniscaleDemo/Messages'
+import axios from 'axios'
+import { App } from './app/app'
 
 const initializeApp = async (): Promise<DispatcherSession> => {
   const session = await Platform.builder()
@@ -21,27 +20,27 @@ const initializeApp = async (): Promise<DispatcherSession> => {
       // Real interceptors calling the service. We use a pattern interceptor to
       // intercept all features defined below that pattern in the model.
       i.interceptPattern(AccountPatterns.pattern, async (input, ctx) => {
-          const headers = { 'Content-Type': 'application/json' };
+          const headers = { 'Content-Type': 'application/json' }
           // To call the feature we call a POST method on the right URL
           // and pass it a serialized GatewayRequest as define in the SDK
           const response = await axios.post(
-            "http://localhost:5298/api/service-to-module/" + ctx.featureId, 
-            GatewayRequest.from(input, ctx), 
+            "http://localhost:5298/api/service-to-module/" + ctx.featureId,
+            GatewayRequest.from(input, ctx),
             { headers }
-          );
+          )
           // The response needs to be serialized into the Result class
           return Result.fromJson(response.data)
         }
       )
       i.interceptPattern(StreamsPatterns.pattern, async (input, ctx) => {
-          const headers = { 'Content-Type': 'application/json' };
+          const headers = { 'Content-Type': 'application/json' }
           // To call the feature we call a POST method on the right URL
           // and pass it a serialized GatewayRequest as define in the SDK
           const response = await axios.post(
-            "http://localhost:5192/api/service-to-module/" + ctx.featureId, 
-            GatewayRequest.from(input, ctx), 
+            "http://localhost:5192/api/service-to-module/" + ctx.featureId,
+            GatewayRequest.from(input, ctx),
             { headers }
-          );
+          )
           // The response needs to be serialized into the Result class
           return Result.fromJson(response.data)
         }
@@ -60,18 +59,19 @@ const initializeApp = async (): Promise<DispatcherSession> => {
 // Wrap the bootstrapper function call in an async function
 const runApp = async () => {
   try {
-    // We need to initialize the PlatformSession so that we can get hold of the 
+    // We need to initialize the PlatformSession so that we can get hold of the
     // dispatcher that we can use to utilize the modeled functionality
-    const dispatcher = await initializeApp(); // Call your asynchronous bootstrapper function
-    const root = createRoot(document.getElementById('root') as HTMLElement);
+    const dispatcher = await initializeApp() // Call your asynchronous bootstrap function
+    const root = createRoot(document.getElementById('root') as HTMLElement)
+
     root.render(
       <StrictMode>
         <App dispatcher={dispatcher} />
       </StrictMode>
     )
   } catch (error) {
-    console.error('Application failed to start:', error);
+    console.error('Application failed to start:', error)
   }
-};
+}
 
-runApp();
+runApp()
