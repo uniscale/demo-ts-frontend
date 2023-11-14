@@ -6,7 +6,6 @@ import { LookupUsers } from "@uniscale-sdk/ActorCharacter-Messagethreads/sdk/Uni
 import { FunctionComponent, useContext, useState } from "react"
 import { AppContext } from "../app"
 import './streams.css'
-import { BackendActionOutput, Result } from "@uniscale-sdk/ActorCharacter-Messagethreads"
 import { createAvatar } from "@dicebear/core"
 import { thumbs } from "@dicebear/collection"
 
@@ -48,9 +47,7 @@ export const Timeline: FunctionComponent = () => {
   const getMessages = async () => {
     // By using the "with" function on the defined feature in the SDK we can
     // pass it through the dispatcher and get our result.
-    const result = Result.fromJson(JSON.stringify(
-      await dispatcher.request(GetMessageList.with(new Empty()))
-    )) as Result<BackendActionOutput<GetMessageList>>
+    const result = await dispatcher.request(GetMessageList.with(new Empty()))
 
     if (!result.success) {
       console.log(result.error?.details?.userError || result.error?.details?.technicalError)
@@ -59,11 +56,9 @@ export const Timeline: FunctionComponent = () => {
 
     // By using the "with" function on the defined feature in the SDK we can
     // pass it through the dispatcher and get our result.
-    const usersResult = Result.fromJson(JSON.stringify(
-      await dispatcher.request(LookupUsers.with(
-        (result.value as MessageFull[]).map(u => u.created?.by as string)
-      ))
-    )) as Result<BackendActionOutput<LookupUsers>>
+    const usersResult = await dispatcher.request(LookupUsers.with(
+      (result.value as MessageFull[]).map(u => u.created?.by as string)
+    ))
 
     if (!usersResult.success) {
       console.log(result.error?.details?.userError || result.error?.details?.technicalError)
@@ -81,12 +76,10 @@ export const Timeline: FunctionComponent = () => {
 
     // By using the "with" function on the defined feature in the SDK we can
     // pass it through the dispatcher and get our result.
-    const result = Result.fromJson(JSON.stringify(
-      await dispatcher.request(SendMessage.with({
-        by: user.userIdentifier,
-        message: msg
-      }))
-    )) as Result<BackendActionOutput<SendMessage>>
+    const result = await dispatcher.request(SendMessage.with({
+      by: user.userIdentifier,
+      message: msg
+    }))
 
     if (!result.success) {
       console.log(result.error?.details?.userError || result.error?.details?.technicalError)
