@@ -6,7 +6,6 @@ import { AppContext } from "../app"
 import './streams.css'
 import { GetDirectMessageList } from "@uniscale-sdk/ActorCharacter-Messagethreads/sdk/UniscaleDemo/Messages_1_0/Functionality/ServiceToModule/Messages/DirectMessages/ListDirectMessages"
 import { SendDirectMessage } from "@uniscale-sdk/ActorCharacter-Messagethreads/sdk/UniscaleDemo/Messages_1_0/Functionality/ServiceToModule/Messages/DirectMessages/SendingANewDirectMessage"
-import { BackendActionOutput, Result } from "@uniscale-sdk/ActorCharacter-Messagethreads"
 
 interface MessageProps {
   message: DirectMessageFull,
@@ -42,9 +41,7 @@ export const DirectMessages: FunctionComponent = () => {
   const getMessages = async () => {
     // By using the "with" function on the defined feature in the SDK we can
     // pass it through the dispatcher and get our result.
-    const result = Result.fromJson(JSON.stringify(
-      await dispatcher.request(GetDirectMessageList.with(user?.userIdentifier))
-    )) as Result<BackendActionOutput<GetDirectMessageList>>
+    const result = await dispatcher.request(GetDirectMessageList.with(user?.userIdentifier))
     if (!result.success) {
       console.log(result.error?.details?.userError || result.error?.details?.technicalError)
       return
@@ -52,9 +49,7 @@ export const DirectMessages: FunctionComponent = () => {
 
     // By using the "with" function on the defined feature in the SDK we can
     // pass it through the dispatcher and get our result.
-    const usersResult = Result.fromJson(JSON.stringify(
-      await dispatcher.request(LookupUsers.with((result.value as DirectMessageFull[]).map(u => u.created?.by as string))))
-    ) as Result<BackendActionOutput<GetDirectMessageList>>
+    const usersResult = await dispatcher.request(LookupUsers.with((result.value as DirectMessageFull[]).map(u => u.created?.by as string)))
     if (!usersResult.success) {
       console.log(result.error?.details?.userError || result.error?.details?.technicalError)
       return
@@ -71,13 +66,11 @@ export const DirectMessages: FunctionComponent = () => {
 
     // By using the "with" function on the defined feature in the SDK we can
     // pass it through the dispatcher and get our result.
-    const result = Result.fromJson(JSON.stringify(
-      await dispatcher.request(SendDirectMessage.with({
+    const result = await dispatcher.request(SendDirectMessage.with({
         by: user.userIdentifier,
         receiver: recipient,
         message: msg,
       }))
-    )) as Result<BackendActionOutput<SendDirectMessage>>
 
     if (!result.success) {
       console.log(result.error?.details?.userError || result.error?.details?.technicalError)
